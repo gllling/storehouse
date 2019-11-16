@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+  <meta charset="UTF-8">
+  <title></title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    .box {
+      width: 350px;
+      height: 350px;
+      margin: 100px;
+      border: 1px solid #ccc;
+      position: relative;
+    }
+
+    .big {
+      width: 400px;
+      height: 400px;
+      position: absolute;
+      top: 0;
+      left: 360px;
+      border: 1px solid #ccc;
+      overflow: hidden;
+      display: none;
+    }
+
+    .mask {
+      width: 175px;
+      height: 175px;
+      background: rgba(255, 255, 0, 0.4);
+      position: absolute;
+      top: 0;
+      left: 0;
+      cursor: move;
+      display: none;
+    }
+
+    .small {
+      position: relative;
+    }
+
+    .box img {
+      vertical-align: top;
+    }
+
+    #bigBox>img {
+      /*是让里面的图片脱标，为的就是让里面的图片进行一个移动*/
+      position: absolute;
+    }
+  </style>
+
+</head>
+
+<body>
+  <div class="box" id="box">
+    <div class="small" id="smallBox">
+      <img src="images/001.jpg" width="350" alt="" />
+
+      <div class="mask" id="mask"></div>
+    </div>
+    <div class="big" id="bigBox">
+      <img id="bigImg" src="images/0001.jpg" width="800" alt="" />
+    </div>
+  </div>
+
+  <script src="./jquery-1.12.4.min.js"></script>
+  <script>
+    //思路
+    //1.给整个大盒子/小图片盒子 设置鼠标移入/移出 事件. 
+    //  遮罩层和大图片盒子 显示/隐藏
+    //2.给小图片盒子设置一个鼠标移动事件. 
+    //  获取当前鼠标在小图片盒子中的位置
+    //  把这个位置减去遮罩层宽高的一半
+    //  把计算得到的这个值,赋值给遮罩层的定位的left和top值. 
+    //3.让大图片盒子中的大图片,跟随鼠标移动
+
+    $(function () {
+      //1.给整个大盒子/小图片盒子 设置鼠标移入/移出 事件
+      $('#smallBox').on('mouseenter', function () {
+        $('#bigBox').show();
+        $('#mask').show();
+      }).on('mouseleave', function () {
+        $('#bigBox').hide();
+        $('#mask').hide();
+      }).on('mousemove', function (e) {//
+        //2.给小图片盒子设置一个鼠标移动事件. 
+        e = e || window.event;
+        //  获取当前鼠标在遮罩层在小盒子中的位置
+        var x = e.pageX - parseInt($('#box').css('marginLeft')) - 1;
+        var y = e.pageY - parseInt($('#box').css('marginTop')) - 1;
+        //  把这个位置减去遮罩层宽高的一半
+        x = x - $('#mask').width() / 2 ;
+        y = y - $('#mask').height() / 2;
+        x = x < 0 ? 0 : x;
+        x = x > 175 ? 175 : x;
+        y = y < 0 ? 0 : y;
+        y = y > 175 ? 175 : y;
+
+        //  把计算得到的这个值,赋值给遮罩层的定位的left和top值. 
+        $('#mask').css({
+          left: x ,
+          top:y
+        })
+
+        //3.让大图片盒子中的大图片,跟随鼠标移动
+        $('#bigImg').css({
+          left: -x * ($('#bigImg').width() / $('#smallBox').width())+'px',
+          top: -y * ($('#bigImg').height() / $('#smallBox').height())+'px',
+        })
+
+
+      });
+
+
+/* 放大镜制作 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    });
+
+
+
+  </script>
+</body>
+
+</html>
